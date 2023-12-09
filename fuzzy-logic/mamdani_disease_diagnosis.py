@@ -4,6 +4,7 @@ import skfuzzy.membership as mf
 import matplotlib.pyplot as plt
 
 
+# Input
 input_age = int(input("Age: "))
 input_blood_pressure = int(input("Blood Pressure: "))
 input_cholesterol = int(input("Cholesterol: "))
@@ -114,15 +115,50 @@ defuzzified  = fuzz.defuzz(y_risk, out_risk, 'centroid')
 
 result = fuzz.interp_membership(y_risk, out_risk, defuzzified)
 
-print("Coroner Heart Diagnosis:", defuzzified)
+print("\nCoroner Heart Diagnosis:", defuzzified)
 
-if defuzzified >= 0 and defuzzified <= 10 and np.max(out_not) > np.max(out_little):
+
+def diagnosed_as(output):
+    if np.sum(output):
+        return fuzz.defuzz(y_risk, output, 'centroid')
+    else:
+        return 0
+
+if defuzzified >= 0 and defuzzified < 5:
     print("Diagnosed as Not Risk")
-elif defuzzified >= 5 and defuzzified <= 20 and np.max(out_not) < np.max(out_little) and np.max(out_little) > np.max(out_mid):
+
+if defuzzified >= 5 and defuzzified < 10 and diagnosed_as(out_not) > diagnosed_as(out_little):
+    print("Diagnosed as Not Risk")
+
+if defuzzified >= 5 and defuzzified < 10 and diagnosed_as(out_not) < diagnosed_as(out_little):
     print("Diagnosed as Little Risk")
-elif defuzzified >= 15 and defuzzified <= 30 and np.max(out_little) < np.max(out_mid) and np.max(out_mid) > np.max(out_high):
+
+if defuzzified >= 10 and defuzzified < 15:
+    print("Diagnosed as Little Risk")
+
+if defuzzified >= 15 and defuzzified < 20 and diagnosed_as(out_little) > diagnosed_as(out_mid):
+    print("Diagnosed as Little Risk")
+    
+if defuzzified >= 15 and defuzzified < 20 and diagnosed_as(out_little) < diagnosed_as(out_mid):
     print("Diagnosed as Middle Risk")
-elif defuzzified >= 25 and defuzzified <= 40 and np.max(out_mid) < np.max(out_high) and np.max(out_high) > np.max(out_very_high):
+
+if defuzzified >= 20 and defuzzified < 25:
+    print("Diagnosed as Middle Risk")
+
+if defuzzified >= 25 and defuzzified < 30 and diagnosed_as(out_mid) > diagnosed_as(out_high):
+    print("Diagnosed as Middle Risk")
+
+if defuzzified >= 25 and defuzzified < 30 and diagnosed_as(out_mid) < diagnosed_as(out_high):
     print("Diagnosed as High Risk")
-elif defuzzified >= 35 and defuzzified <= 50 and np.max(out_high) < np.max(out_very_high):
+
+if defuzzified >= 30 and defuzzified < 35:
+    print("Diagnosed as High Risk")
+
+if defuzzified >= 35 and defuzzified < 40 and diagnosed_as(out_high) > diagnosed_as(out_very_high):
+    print("Diagnosed as High Risk")
+
+if defuzzified >= 40 and defuzzified < 50:
+    print("Diagnosed as Very High Risk")
+
+if defuzzified >= 35 and defuzzified < 40 and diagnosed_as(out_high) < diagnosed_as(out_very_high):
     print("Diagnosed as Very High Risk")
